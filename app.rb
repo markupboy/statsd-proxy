@@ -1,10 +1,13 @@
 ENV["BUNDLE_GEMFILE"] = File.expand_path("./Gemfile", File.dirname(__FILE__))
-RACK_ENV ||= ENV["RACK_ENV"] || "development"
-
 require "bundler/setup"
+
 require "sinatra"
-require "sinatra/reloader" if RACK_ENV == "development"
+require "sinatra/config_file"
+config_file 'config.yml'
+
 require "statsd"
+RACK_ENV ||=  settings.env || "development"
+require "sinatra/reloader" if RACK_ENV == "development"
 
 # Default app settings
 set :environment, RACK_ENV.to_sym
@@ -12,7 +15,7 @@ set :logging, true
 set :raise_errors, true
 
 def build_client
-  Statsd.new ENV['STATSD_HOST'], ENV['STATSD_PORT']
+  Statsd.new settings.statsd_host, settings.statsd_port
 end
 
 def statsd
