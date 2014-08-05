@@ -45,6 +45,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  daemons
   foreman (~> 0.51.0)
   rack-test (~> 0.6.1)
   rspec (~> 2.11.0)
