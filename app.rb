@@ -58,9 +58,11 @@ get '/timing' do
 end
 
 get '/gauge' do
-  sample_rate = get_sample_rate(params)
-  args = [params['name'], params['value'].to_f]
-  args << sample_rate if sample_rate
-  statsd.gauge *args
-  [200, {'Content-Type' => 'image/gif'}, ""]
+  unless params['value'] == '0'
+    sample_rate = get_sample_rate(params)
+    args = [params['name'], params['value'].to_f]
+    args << sample_rate if sample_rate
+    statsd.gauge *args
+    [200, {'Content-Type' => 'image/gif'}, ""]
+  end
 end
